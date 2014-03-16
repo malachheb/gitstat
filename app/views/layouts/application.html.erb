@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Homework</title>
+  <%= stylesheet_link_tag  "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body class="wide" data-twttr-rendered="" style="background-color: rgb(190, 189, 182);">
+	
+
+	<div class="main container" style="width: 1008px;margin:25px 50px 75px 100px;">
+		<div class="layout">
+		</div>
+		<div class="main">
+			<%= yield  %>
+		</div>
+		<div id="content">
+		</div>
+	</div>
+</body>
+</html>
