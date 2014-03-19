@@ -14,7 +14,8 @@ class RepositoriesController < ApplicationController
   end
 
   def chart
-
+    @repo = Repository.find_or_fetch(params[:owner], params[:name])
+    @chart_user = params[:user]
   end
 
 end

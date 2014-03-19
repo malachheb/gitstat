@@ -2,12 +2,16 @@
   .column
     .ui.segment{style: "height:300px; overflow-x: auto;"}
       .ui.animated.selection.list
-        - @repo.committers.each do |committer| 
-          .item
-            %image.ui.avatar.image{src: "#{committer.avatar}"}
+        - @repo.commiters.each do |committer| 
+          = link_to(chart_repositories_path(owner: @repo.owner, name: @repo.name, user: committer.login), {class: 'item', remote: true}) do
+            %image.ui.avatar.image{src: "http://www.gravatar.com/avatar/#{committer.gravatar_id}"}
             .content
               .header= committer.login
-              24 commits
+              = "#{committer.contributions} commits"
+      .ui.dimmer
+        .ui.large.text.loader
+          Loading
 
   .column
-    = render('chart')
+    #chart-div
+      = render('chart')

@@ -1,21 +1,21 @@
 class Github::Repository
-	include HTTParty
+  include HTTParty
 
-	base_uri 'https://api.github.com'
+  base_uri 'https://api.github.com'
 
-	def initialize(owner, name)
-    	@owner = owner
+  def initialize(owner, name)
+      @owner = owner
       @name = name
       @auth = { :username => 'malachheb', :password => 'cout123' }
   end
 
-	def user(id)
-    	self.class.get("/users/#{id}", {:basic_auth =>@auth,  :headers => {"User-Agent" => "malachheb"} })
-  	end
+  def user(id)
+      self.class.get("/users/#{id}", {:basic_auth =>@auth,  :headers => {"User-Agent" => "malachheb"} })
+    end
 
-  	def get_repository
-  		response = self.class.get("/repos/#{@owner}/#{@name}", {:basic_auth =>@auth, :headers => {"User-Agent" => "malachheb"} })
-  	  {github_id: response["id"],
+    def get_repository
+      response = self.class.get("/repos/#{@owner}/#{@name}", {:basic_auth =>@auth, :headers => {"User-Agent" => "malachheb"} })
+      {github_id: response["id"],
         name: response["name"],
         owner: response["owner"]["login"],
         description: response["description"],
@@ -39,24 +39,22 @@ class Github::Repository
       #   }
       # end
     end
-    
+
     def get_contributors(owner, name)
       contribs = Octokit.contributors({owner: owner, name: name})
     end
 
-    def get_commits
-      response = self.class.get("/repos/#{@owner}/#{@name}/commits?page=1&per_page=100", {:headers => {"User-Agent" => "malachheb"} })
-      response.map do |commit|
+    def get_commits(owner, name)
+      commits = Octokit.commits("#{owner}/#{name}")
+      #response = self.class.get("/repos/#{@owner}/#{@name}/commits?page=1&per_page=100", {:headers => {"User-Agent" => "malachheb"} })
+      commits.map do |commit|
         result = {
-          sha: commit["sha"],
-          url: commit["url"],
-          date: commit["commit"]["committer"]["date"],
-          message: commit["commit"]["message"],
+          sha: commit.sha,
+          date: commit.commit.committer.date,
+          message: commit.commit.message,
         }
-        unless commit["committer"].nil?
-          result[:author] = {login: commit["committer"]["login"], github_id: commit["committer"]["id"], avatar: commit["committer"]["avatar_url"]}
-        end
+        result[:committer] =  commit.committer.login unless commit.committer.nil?
         result
       end
-    end 
+    end
 end

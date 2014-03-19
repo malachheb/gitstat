@@ -4,6 +4,7 @@
   <title>Homework</title>
   <%= stylesheet_link_tag  "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
+  <%= yield :header %>
   <%= csrf_meta_tags %>
 </head>
 <body class="wide" data-twttr-rendered="" style="background-color: rgb(190, 189, 182);">

@@ -34,4 +34,5 @@
 //= require bootstrap-carousel
 //= require main
 //= require jquery_ujs
-//= require jquery.bootpag.min
+//= require websocket_rails/main
+

@@ -16,7 +16,7 @@
                 .flag-content
                   .thumbnail
                     - unless commit.commiter.nil?
-                      %img{height: "32px", src: commit.commiter.avatar, width: "32px"}/
+                      %img{height: "32px", src: "http://www.gravatar.com/avatar/#{commit.commiter.gravatar_id}", width: "32px"}/
                   %h3= commit.message
               .dot
               .line
@@ -28,13 +28,15 @@
             - @repo.commits.map{|c| c.date.year}.uniq.each_with_index do |year, i|
               .major{style: "left: #{16+(i*150*12)}px; text-indent: -14px;"}= year
           .time-interval{style: ""}
-            - %w(Jan Feb Mar Apr May June July Aug Sept Oct Nov Dec).each_with_index do |m,i|
+            - months_names.each_with_index do |m,i|
               ._idd{style: "left: #{16+(i*150)}px; text-indent: -12px;"}= m
       .timenav-background{style: ""}
         .timenav-line{style: "left: 642px; "}
         .timenav-interval-background
           .top-highlight
-
+  .ui.dimmer
+    .ui.small.text.loader
+      Loading
 
 
 	

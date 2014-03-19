@@ -1,7 +1,7 @@
 class Repository
   include Mongoid::Document
   include Mongoid::Timestamps
-  
+
   embeds_many :commits
   embeds_many :commiters
 
@@ -26,9 +26,9 @@ class Repository
       repository = github_repository.get_repository
       repo = Repository.new(repository)
       if repo.save
-        #collaborators = github_repository.get_collaborators
-        #repo.find_or_create_collaborators(collaborators)
-        commits = github_repository.get_commits
+        contributors = github_repository.get_contributors(owner,name)
+        repo.find_or_create_contributors(contributors)
+        commits = github_repository.get_commits(owner, name)
         repo.find_or_create_commits(commits)
       end
     end
@@ -37,14 +37,14 @@ class Repository
 
   def find_or_create_commits(commits)
     commits.each do |commit|
-      commiter = commit.delete(:author)
-      co = self.commits.find_or_initialize_by(commit)
-      if co.save!
-        unless commiter.nil?
-          co_user = co.build_commiter(commiter)
-          co_user.save!
-        end 
-      end
+      #commiter = commit.delete(:committer)
+      self.commits.find_or_create_by(commit)
+      # if co.save!
+      #   unless commiter.nil?
+      #     co_user = co.build_commiter(commiter)
+      #     co_user.save!
+      #   end
+      # end
     end
   end
 
@@ -54,7 +54,7 @@ class Repository
 
   def find_or_create_contributors(contributors)
     contributors.each do |contributor|
-      self.commiters.find_or_create_by({login: contributor.login, github_id: contributor.id, gravatar_id: contributor.gravatar_id})
+      self.commiters.find_or_create_by({login: contributor.login, github_id: contributor.id, gravatar_id: contributor.gravatar_id, contributions: contributor.contributions })
     end
   end
 

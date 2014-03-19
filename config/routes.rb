@@ -2,10 +2,11 @@ Homework::Application.routes.draw do
    root :to => 'search#index'
    match '/repositories/:owner/:name' => 'repositories#show', :as => 'repository'
    resources :repositories, :except => :show do
-      collection do
-        get :search
-      end
-   end
+    collection do
+      get :search
+      get :chart
+    end
+  end
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
