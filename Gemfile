@@ -6,8 +6,9 @@ gem 'rails', '3.2.8'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 gem 'mongoid', '~> 3.1.0'
 gem 'sqlite3'
-
-
+gem "haml"
+gem 'pry'
+gem  'octokit'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

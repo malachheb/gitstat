@@ -1,24 +1,53 @@
-$( document ).ready(function() {
-	var ctx = document.getElementById("myChart").getContext("2d");
+$(function() {
 	var data = {
-	labels : ["January","February","March","April","May","June","July"],
+	labels : $('.chart_information').data('labels'),
 	datasets : [
-		{
+			{
 			fillColor : "rgba(220,220,220,0.5)",
 			strokeColor : "rgba(220,220,220,1)",
 			pointColor : "rgba(220,220,220,1)",
 			pointStrokeColor : "#fff",
-			data : [65,59,90,81,0,0,40]
-		},
-		{
+			data : $('.chart_information').data('count'),
+			},
+			{
 			fillColor : "rgba(151,187,205,0.5)",
 			strokeColor : "rgba(151,187,205,1)",
 			pointColor : "rgba(151,187,205,1)",
 			pointStrokeColor : "#fff",
-			data : [28,48,40,19,0,0,100]
-		}
-	]
-}	
-new Chart(ctx).Line(data);
+			data : $('.chart_information').data('user-count')
+			}
+		]
+	}	
+	draw_chart(data)
+
+	/*$('#search_form').submit(function(event ) {
+  		get_repo('q');
+  		return false;
+	});
+
+
+	function get_repo(q) {
+		$.ajax({
+  			url: "https://api.github.com/search/repositories",
+  			data: {q: "calm"} ,
+  			dataType: "json",
+  			success: function(data) {
+    			alert(data["total_count"]);
+  			},
+  			error: function(e){
+        		alert('Error: '+e);
+    		}
+		});
+	}*/
+
 });
+
+function draw_chart(data){
+	var ctx = document.getElementById("myChart").getContext("2d");
+	
+	new Chart(ctx).Line(data);
+
+}
+
+
 

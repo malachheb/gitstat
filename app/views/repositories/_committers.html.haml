@@ -1,0 +1,13 @@
+.two.column.stackable.ui.grid
+  .column
+    .ui.segment{style: "height:300px; overflow-x: auto;"}
+      .ui.animated.selection.list
+        - @repo.committers.each do |committer| 
+          .item
+            %image.ui.avatar.image{src: "#{committer.avatar}"}
+            .content
+              .header= committer.login
+              24 commits
+
+  .column
+    = render('chart')

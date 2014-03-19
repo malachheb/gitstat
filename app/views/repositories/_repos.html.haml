@@ -1,0 +1,31 @@
+.ui.segment
+  .ui.selection.list
+    - @items.each do |repo|
+      = link_to(repository_path(repo.owner.login, repo.name), {class: 'item'}) do
+        %img.ui.avatar.image{src: "http://www.gravatar.com/avatar/#{repo.owner.gravatar_id}"}
+        .content
+          .header= repo.name
+          = truncate(h(repo.description), :length => 100)
+        .ui.right.floated
+          %i.star.icon= repo.stargazers_count
+          %i.fork.code.icon= repo.forks_count
+.ui.center.aligned.segment
+  .ui.buttons
+    = link_to(search_repositories_path(q: params[:q], page: 1), {:class => "ui left labeled icon button", :remote => true}) do
+      %i.left.fast.backward.icon
+      First
+    = link_to(search_repositories_path(q: params[:q], page: next_page(@page,@total)), {:class => "ui right labeled icon button", :remote => true}) do
+      %i.right.step.forward.icon
+      Next
+    .circular.ui.icon.button{style:"padding-top:6px"}
+      = form_tag(search_repositories_path(:q => params[:q]), :method => :get, :remote => true) do
+        %input{type: "text", style: "width: 20px", name: "page", value: "#{@page}"}
+        %span="/"
+        .ui.black.circular.label= last_page(@total)
+    = link_to(search_repositories_path(q: params[:q], page: prev_page(@page,@total)), {:class => "ui left labeled icon button", :remote => true}) do
+      %i.left.step.backward.icon
+      Prev
+    = link_to(search_repositories_path(q: params[:q], page: last_page(@total)), {:class => "ui right labeled icon button", :remote => true}) do
+      %i.right.fast.forward.icon
+      Last
+  

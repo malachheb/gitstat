@@ -1,0 +1,4 @@
+.ui.segment{style: "height:300px;"}
+    - chart_data = chart_data(@repo.commits, @repo.owner)
+    %canvas{id: "myChart", width: "470", height:"270"}
+= tag(:div, class: "chart_information", data: {labels: chart_data[:labels], count: chart_data[:data], user_count: chart_data[:user_data] })

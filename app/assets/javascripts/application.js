@@ -30,6 +30,8 @@
 //= require transition
 //= require semantic
 //= require menu
+//= require bootstrap.min
 //= require bootstrap-carousel
 //= require main
 //= require jquery_ujs
+//= require jquery.bootpag.min

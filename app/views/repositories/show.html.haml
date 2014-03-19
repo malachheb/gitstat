@@ -1,0 +1,11 @@
+.page-header
+  .ui.fluid.icon.input
+    = form_tag search_repositories_path, :method => :get, :remote => true do
+      %input{placeholder: "Search repository..", type: "text", name:"q"}
+    %i.search.icon
+#repos_list
+  = render 'committers'
+  = render 'timeline'
+
+
+
