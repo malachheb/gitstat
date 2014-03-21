@@ -1,6 +1,5 @@
 class Repository
   include Mongoid::Document
-  include Mongoid::Timestamps
 
   embeds_many :commits
   embeds_many :commiters
@@ -12,39 +11,64 @@ class Repository
   field :url, type: String
   field :stars, type: Integer
   field :forks, type: Integer
-  field :public, type: String
+  field :public, type: Boolean
+  field :updated_at, type: DateTime
 
   validates_presence_of :github_id, :name, :owner
+  validates_uniqueness_of :github_id
 
   index({ name: 1 }, { unique: true, background: true })
   index({ github_id: 1 }, { unique: true, background: true })
 
   def self.find_or_fetch(owner, name)
     repo = where(owner: owner, name: name).first
+    repository = Github::Repository.get_repository(owner, name)
     if repo.nil?
-      github_repository = Github::Repository.new(owner, name)
-      repository = github_repository.get_repository
-      repo = Repository.new(repository)
-      if repo.save
-        contributors = github_repository.get_contributors(owner,name)
-        repo.find_or_create_contributors(contributors)
-        commits = github_repository.get_commits(owner, name)
-        repo.find_or_create_commits(commits)
-      end
+      repo = create_repo(repository)
+      # github_repository = Github::Repository.new(owner, name)
+      # repository = github_repository.get_repository(owner, name)
     end
     repo
   end
 
+  def self.create_repo(repository)
+    repo = Repository.new(repository)
+    if repo.save
+      contributors =  Github::Repository.get_contributors(repo.owner,repo.name)
+      repo.find_or_create_contributors(contributors) unless contributors.empty?
+      commits =  Github::Repository.get_commits(repo.owner, repo.name)
+      repo.find_or_create_commits(commits)
+    end
+    repo
+  end
+
+  def update_repo(params)
+    since = self.updated_at.iso8601
+    if self..update_attributes(params)
+      # contributors =  Github::Repository.get_contributors(owner,name)
+      # repo.commiters.delete_all
+      # repo.find_or_create_contributors(contributors)
+      commits =  Github::Repository.get_commits(self.owner, self.name, since)
+      self.find_or_create_commits(commits)
+      update_commiters(commits)
+    end
+  end
+
   def find_or_create_commits(commits)
     commits.each do |commit|
-      #commiter = commit.delete(:committer)
       self.commits.find_or_create_by(commit)
-      # if co.save!
-      #   unless commiter.nil?
-      #     co_user = co.build_commiter(commiter)
-      #     co_user.save!
-      #   end
-      # end
+    end
+  end
+
+  def update_commiters(commits)
+    commits.each do |commit|
+      cont =  commit.committer
+      committer = self.commiters.where(login: cont.login).first
+      unless committer.nil?
+        committer.update_attributes({contributions: (committer.contributions+1) })
+      else
+        self.commiters.create({login: cont.login, github_id: cont.id, gravatar_id: cont.gravatar_id, contributions: 1 })
+      end
     end
   end
 
@@ -55,7 +79,7 @@ class Repository
   def find_or_create_contributors(contributors)
     contributors.each do |contributor|
       self.commiters.find_or_create_by({login: contributor.login, github_id: contributor.id, gravatar_id: contributor.gravatar_id, contributions: contributor.contributions })
-    end
+    end 
   end
 
 end

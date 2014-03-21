@@ -1,42 +1,39 @@
-.ui.segment{style: "height:300px;"}
-  #timeline{style: ""}
-    .navigation{style: "overflow: auto;"}
-      .timenav{style: "left: 25px;"}
-        .content{style: "width: 1149.0410958891518px;"}
-          - commits_year = @repo.commits.asc(:date).map{|c| c.date.year}.uniq
-          - current_month = 0; count_month = 0;
-          - @repo.commits.asc(:date).each do |commit|
-            - commit_pos = 13+(150*12*commits_year.index(commit.date.year))+(150*(commit.date.month.to_i-1))+(5*commit.date.day.to_i)
-            - if commit.date.month.to_i == current_month
-              - count_month +=1
-            - else
-              - current_month= commit.date.month.to_i; count_month = 0
-            .marker{id: "2009,2-0", style: "left: #{commit_pos}px;"}
-              .flag{style: "top: #{180-(45*count_month)}px;"}
-                .flag-content
-                  .thumbnail
-                    - unless commit.commiter.nil?
-                      %img{height: "32px", src: "http://www.gravatar.com/avatar/#{commit.commiter.gravatar_id}", width: "32px"}/
-                  %h3= commit.message
-              .dot
-              .line
-                .event-line
-        .time
-          .time-interval-minor
-            .minor{style: "width: 1499.9999999986867px; left: -33.6301370119628px;"}
-          .time-interval-major
-            - @repo.commits.map{|c| c.date.year}.uniq.each_with_index do |year, i|
-              .major{style: "left: #{16+(i*150*12)}px; text-indent: -14px;"}= year
-          .time-interval{style: ""}
-            - months_names.each_with_index do |m,i|
-              ._idd{style: "left: #{16+(i*150)}px; text-indent: -12px;"}= m
-      .timenav-background{style: ""}
-        .timenav-line{style: "left: 642px; "}
-        .timenav-interval-background
-          .top-highlight
-  .ui.dimmer
-    .ui.small.text.loader
-      Loading
+#timeline{style: ""}
+  .navigation{style: "overflow: scroll;"}
+    .timenav{style: "left: 25px;"}
+      .content{style: "width: 1150px;"}
+        - commits_year = @repo.commits.asc(:date).map{|c| c.date.year}.uniq
+        - current_month = 0; count_month = 0;
+        - @repo.commits.asc(:date).each do |commit|
+          - commit_pos = 13+(150*12*commits_year.index(commit.date.year))+(150*(commit.date.month.to_i-1))+(5*commit.date.day.to_i)
+          - if commit.date.month.to_i == current_month
+            - count_month +=1
+          - else
+            - current_month= commit.date.month.to_i; count_month = 0
+          .marker{id: "2009,2-0", style: "left: #{commit_pos}px;"}
+            .flag{style: "top: #{180-(45*count_month)}px;"}
+              .flag-content
+                .thumbnail
+                  - unless commit.commiter.nil?
+                    %img{height: "32px", src: "http://www.gravatar.com/avatar/#{commit.commiter.gravatar_id}", width: "32px"}/
+                %h3= commit.message
+            .dot
+            .line
+              .event-line
+      .time
+        .time-interval-minor
+          .minor{style: "width: 1500px; left: -33.6301370119628px;"}
+        .time-interval-major
+          - @repo.commits.map{|c| c.date.year}.uniq.each_with_index do |year, i|
+            .major{style: "left: #{16+(i*150*12)}px; text-indent: -14px;"}= year
+        .time-interval{style: ""}
+          - months_names.each_with_index do |m,i|
+            ._idd{style: "left: #{16+(i*150)}px; text-indent: -12px;"}= m
+    .timenav-background{style: ""}
+      .timenav-line{style: "left: 642px; "}
+      .timenav-interval-background
+        .top-highlight
+  
 
 
 	

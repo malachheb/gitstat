@@ -1,9 +1,6 @@
-- content_for :header do
-  = javascript_include_tag 'chart'
-.ui.segment{style: "height:300px;"}
-  - chart_data = chart_data(@repo.commits, @chart_user || @repo.owner)
-  %canvas{id: "myChart", width: "470", height:"270"}
-  .ui.dimmer
-    .ui.large.text.loader
-      Loading
+- chart_data = chart_data(@repo.commits, @chart_user || @repo.owner)
+.ui.small.labels.rigth
+	.ui.label{style: "background-color: rgba(151,187,205,0.5);"}= "#{@chart_user||@repo.owner}"
+	.ui.label= "All"
+%canvas{id: "myChart", width: "470", height:"270"}
 = tag(:div, class: "chart_information", data: {labels: chart_data[:labels], count: chart_data[:data], user_count: chart_data[:user_data] })

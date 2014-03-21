@@ -3,7 +3,8 @@ class RepositoriesController < ApplicationController
   end
 
   def show
-    @repo = Repository.find_or_fetch(params[:owner], params[:name])
+    @repo = Repository.where(owner: params[:owner], name: params[:name]).first
+    RepositoriesWorker.perform_async(params[:owner], params[:name])
   end
 
   def search
@@ -14,8 +15,19 @@ class RepositoriesController < ApplicationController
   end
 
   def chart
-    @repo = Repository.find_or_fetch(params[:owner], params[:name])
+    @repo = Repository.where(owner: params[:owner], name: params[:name]).first
     @chart_user = params[:user]
+    render :partial => "chart", :layout => false
+  end
+
+  def committers
+    @repo = Repository.where(owner: params[:owner], name: params[:name]).first
+    render :partial => "committers", :layout => false
+  end
+
+  def commits
+    @repo = Repository.where(owner: params[:owner], name: params[:name]).first
+    render :partial => "timeline", :layout => false
   end
 
 end

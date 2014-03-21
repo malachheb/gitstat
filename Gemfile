@@ -10,6 +10,7 @@ gem "haml"
 gem 'pry'
 gem  'octokit'
 gem 'websocket-rails'
+gem 'sidekiq'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -23,6 +24,13 @@ group :assets do
 end
 gem 'httparty'
 gem 'jquery-rails'
+
+group :test do
+   gem 'rspec-rails', '2.11.0'
+   gem 'fabrication', '2.5.0'
+   gem 'mongoid-rspec', '1.5.4'
+   gem 'webmock', '1.7.10'	
+end
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

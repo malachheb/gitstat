@@ -35,4 +35,6 @@
 //= require main
 //= require jquery_ujs
 //= require websocket_rails/main
+//= require chart
+//= require repo
 

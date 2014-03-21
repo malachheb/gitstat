@@ -37,4 +37,6 @@ Homework::Application.configure do
 
   config.middleware.delete Rack::Lock
 
+  config.assets.logger = nil
+
 end

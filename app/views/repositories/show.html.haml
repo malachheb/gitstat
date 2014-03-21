@@ -1,11 +1,46 @@
+- content_for :header do
+	= javascript_include_tag 'socket'
+= tag(:div, class: "repo_info", data: {owner: params[:owner], name: params[:name]})
 .page-header
-  .ui.fluid.icon.input
-    = form_tag search_repositories_path, :method => :get, :remote => true do
-      %input{placeholder: "Search repository..", type: "text", name:"q"}
-    %i.search.icon
+	.ui.fluid.icon.input
+		= form_tag search_repositories_path, :method => :get, :remote => true do
+			%input{placeholder: "Search repository..", type: "text", name:"q"}
+		%i.search.icon
 #repos_list
-  = render 'committers'
-  = render 'timeline'
+	.ui.red.inverted.segment.hidden
+	.two.column.stackable.ui.grid
+		.column
+			%h4.ui.top.attached.header
+				Committers
+			.ui.segment.attached{style: "height:310px; overflow-x: auto;"}
+				#committers-div
+					- if @repo
+						= render 'committers'
+					- else
+						.ui.active.dimmer#committers_dimmer
+							.ui.large.text.loader
+								Loading
+		.column
+			%h4.ui.top.attached.header
+				Commits Activity
+			.ui.segment.attached{style: "height:310px;"}
+				#chart-div
+					- if @repo
+						= render('chart')
+					- else
+						.ui.active.dimmer#chart_dimmer
+							.ui.large.text.loader
+								Loading
+	%h4.ui.top.attached.header
+		Commits Timeline
+	.ui.segment.attached{style: "height:300px;"}
+		#timeline-div
+			- if @repo
+				= render 'timeline'
+			- else
+				.ui.active.dimmer#timeline_dimmer
+					.ui.large.text.loader
+						Loading
 
 
 

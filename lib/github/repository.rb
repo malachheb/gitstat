@@ -10,51 +10,30 @@ class Github::Repository
   end
 
   def user(id)
-      self.class.get("/users/#{id}", {:basic_auth =>@auth,  :headers => {"User-Agent" => "malachheb"} })
-    end
+    self.class.get("/users/#{id}", {:basic_auth =>@auth,  :headers => {"User-Agent" => "malachheb"} })
+  end
 
-    def get_repository
-      response = self.class.get("/repos/#{@owner}/#{@name}", {:basic_auth =>@auth, :headers => {"User-Agent" => "malachheb"} })
-      {github_id: response["id"],
-        name: response["name"],
-        owner: response["owner"]["login"],
-        description: response["description"],
-        url: response["html_url"],
-        stars: response["stargazers_count"].to_i,
-        forks: response["forks_count"].to_i}
-
-    end
+  def self.get_repository(owner, name)
+    repo = Octokit.repository({owner: owner, name: name})
+     {github_id: repo.id,name: repo.name,owner: repo.owner.login,description: repo.description,url: repo.html_url,
+      stars: repo.stargazers_count.to_i,forks: repo.forks_count.to_i,updated_at: repo.updated_at}
+  end
 
     def self.search_repositories(q, page, per_page)
       repos = Octokit.search_repositories(q, {page: page, per_page: per_page})
-      #response = self.class.get("/search/repositories?q=#{q}", {:headers => {"User-Agent" => "malachheb"} })
-      # items = repos.items.map do |repo|
-      #   {
-      #     name: repo.name,
-      #     description: repo.description,
-      #     stargazers_count: repo.stargazers_count,
-      #     forks_count: repo.forks_count,
-      #     owner: repo.owner.login,
-      #     avatar_url: repo.owner.avatar_url
-      #   }
-      # end
     end
 
-    def get_contributors(owner, name)
+    def self.get_contributors(owner, name)
       contribs = Octokit.contributors({owner: owner, name: name})
     end
 
-    def get_commits(owner, name)
-      commits = Octokit.commits("#{owner}/#{name}")
+    def self.get_commits(owner, name, since= nil)
+      options = {per_page: 100}
+      options[:since] = since unless since.nil?
+      commits = Octokit.commits("#{owner}/#{name}", nil, options)
       #response = self.class.get("/repos/#{@owner}/#{@name}/commits?page=1&per_page=100", {:headers => {"User-Agent" => "malachheb"} })
       commits.map do |commit|
-        result = {
-          sha: commit.sha,
-          date: commit.commit.committer.date,
-          message: commit.commit.message,
-        }
-        result[:committer] =  commit.committer.login unless commit.committer.nil?
-        result
+        result = {sha: commit.sha,date: commit.commit.committer.date,message: commit.commit.message,committer: commit.committer.try(:login)}
       end
     end
 end

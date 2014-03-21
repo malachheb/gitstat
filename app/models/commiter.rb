@@ -10,6 +10,7 @@ class Commiter
   field :contributions, type: Integer
 
   validates_presence_of :github_id, :login
+  validates_uniqueness_of :github_id, :login
 
   index({ login: 1 }, { unique: true, background: true })
   index({ github_id: 1 }, { unique: true, background: true })
