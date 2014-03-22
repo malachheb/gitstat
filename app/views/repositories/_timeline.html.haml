@@ -1,15 +1,17 @@
+- css = timeline_css;
 #timeline{style: ""}
-  .navigation{style: "overflow: scroll;"}
-    .timenav{style: "left: 25px;"}
-      .content{style: "width: 1150px;"}
+  .navigation{style: "overflow: auto;", id: "navigation"}
+    .timenav{style: "left: 25px;top: #{css[:top_time_nav]}px; vertical-align: top;"}
+      .content{style: "width: 1150px; "}
         - commits_year = @repo.commits.asc(:date).map{|c| c.date.year}.uniq
-        - current_month = 0; count_month = 0;
+        - count_month = 0;prev_commit = nil;
         - @repo.commits.asc(:date).each do |commit|
           - commit_pos = 13+(150*12*commits_year.index(commit.date.year))+(150*(commit.date.month.to_i-1))+(5*commit.date.day.to_i)
-          - if commit.date.month.to_i == current_month
+          - if !prev_commit.nil? && ((commit.date - prev_commit.date).to_i <=29 )
             - count_month +=1
+            - prev_commit = commit
           - else
-            - current_month= commit.date.month.to_i; count_month = 0
+            - prev_commit= commit ; count_month = 0
           .marker{id: "2009,2-0", style: "left: #{commit_pos}px;"}
             .flag{style: "top: #{180-(45*count_month)}px;"}
               .flag-content
@@ -22,15 +24,17 @@
               .event-line
       .time
         .time-interval-minor
-          .minor{style: "width: 1500px; left: -33.6301370119628px;"}
+          .minor{style: "width: #{css[:width]}px; left: -33px;"}
         .time-interval-major
-          - @repo.commits.map{|c| c.date.year}.uniq.each_with_index do |year, i|
-            .major{style: "left: #{16+(i*150*12)}px; text-indent: -14px;"}= year
+          - css[:year_pos].each do|year, v|
+            .major{style: "left: #{v[:pos]}px; text-indent: -14px;"}= year
         .time-interval{style: ""}
-          - months_names.each_with_index do |m,i|
-            ._idd{style: "left: #{16+(i*150)}px; text-indent: -12px;"}= m
-    .timenav-background{style: ""}
-      .timenav-line{style: "left: 642px; "}
+          - css[:year_pos].each do |y, vy| 
+            - vy[:months].each do |k,v|
+              ._idd{style: "left: #{v}px; text-indent: -12px;"}= k
+    .timenav-background{style: "top: 0px; width: #{css[:width]}px; height: #{css[:height_time_back]}px;"}
+      - css[:year_pos].each do |y, v|
+        .timenav-line{style: "left: #{24+v[:pos]}px; height: #{css[:height_time_back]}px;"}
       .timenav-interval-background
         .top-highlight
   

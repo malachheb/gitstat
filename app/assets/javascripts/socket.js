@@ -5,6 +5,9 @@ $(function() {
     com_chart = new CommitChart();
     com_chart.draw_chart();
     new Repo('', '').init_event_committers();
+
+    var objDiv = document.getElementById("navigation");
+    objDiv.scrollTop = objDiv.scrollHeight;
 });
 
 function socket_subscribe() {
@@ -20,20 +23,13 @@ function socket_subscribe() {
 		console.log('a new repo is created!');
   });
 
-/*  channel.bind('error', function(repo) {
-		if(repo.name == $('.repo_info').data('name')){
-			alert('error '+repo.name);
-		}
-		console.log('a repo is updated!');
-  });*/
-
   channel.bind('error', function(repo) {
     if(repo.name == $('.repo_info').data('name')){
       $('.ui.red.inverted.segment').html(repo.message);
       $('.ui.red.inverted.segment').removeClass("hidden");
       $('.ui.active.dimmer').removeClass("active");
     }
-    console.log('a repo with conflict!');
+    console.log('a repo with error!');
   });
 
   channel.bind('update', function(repo) {
