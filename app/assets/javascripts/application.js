@@ -11,28 +11,7 @@
 // about supported directives.
 //
 //= require jquery
-//=require Chart.min
-//= require main
-//= require tablesort
-//= require waypoints
-//= require api
-//= require state
-//= require accordion
-//= require checkbox
-//= require dimmer
-//= require dropdown
-//= require modal
-//= require popup
-//= require rating
-//= require shape
-//= require sidebar
-//= require tab
-//= require transition
-//= require semantic
-//= require menu
-//= require bootstrap.min
-//= require bootstrap-carousel
-//= require main
+//= require Chart.min
 //= require jquery_ujs
 //= require websocket_rails/main
 //= require chart

@@ -4,4 +4,4 @@
       %image.ui.avatar.image{src: "http://www.gravatar.com/avatar/#{committer.gravatar_id}"}
       .content
         .header= committer.login
-        = "#{committer.contributions} commits"
+        = "#{@repo.contributor_commits(committer.login)} commits "

@@ -5,7 +5,7 @@ class Commit
   embedded_in :repository
 
   field :sha, type: String
-  field :date, type: Date
+  field :date, type: DateTime
   field :message, type: String
   field :committer, type: String
   field :additions, type: Integer

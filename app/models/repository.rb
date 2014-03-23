@@ -25,8 +25,6 @@ class Repository
     repository = Github::Repository.get_repository(owner, name)
     if repo.nil?
       repo = create_repo(repository)
-      # github_repository = Github::Repository.new(owner, name)
-      # repository = github_repository.get_repository(owner, name)
     end
     repo
   end
@@ -45,9 +43,6 @@ class Repository
   def update_repo(params)
     since = self.updated_at.iso8601
     if self..update_attributes(params)
-      # contributors =  Github::Repository.get_contributors(owner,name)
-      # repo.commiters.delete_all
-      # repo.find_or_create_contributors(contributors)
       commits =  Github::Repository.get_commits(self.owner, self.name, since)
       self.find_or_create_commits(commits)
       update_commiters(commits)
@@ -56,7 +51,8 @@ class Repository
 
   def find_or_create_commits(commits)
     commits.each do |commit|
-      self.commits.find_or_create_by(commit)
+      params = {sha: commit.sha,date: commit.commit.committer.date,message: commit.commit.message,committer: commit.committer.try(:login)}
+      self.commits.find_or_create_by(params)
     end
   end
 
@@ -80,6 +76,10 @@ class Repository
     contributors.each do |contributor|
       self.commiters.find_or_create_by({login: contributor.login, github_id: contributor.id, gravatar_id: contributor.gravatar_id, contributions: contributor.contributions })
     end 
+  end
+
+  def contributor_commits(login)
+    commits.where(committer: login).count
   end
 
 end

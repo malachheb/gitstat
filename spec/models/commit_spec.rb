@@ -6,7 +6,7 @@ describe Commit do
   subject { commit }
 
   it { should have_field(:sha).of_type(String) }
-  it { should have_field(:date).of_type(Date) }
+  it { should have_field(:date).of_type(DateTime) }
   it { should have_field(:message).of_type(String) }
   it { should have_field(:committer).of_type(String) }
   it { should have_field(:additions).of_type(Integer) }

@@ -453,3 +453,8 @@
 .ui.segment.bottom.attached:last-child {
   margin-bottom: 0em;
 }
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
