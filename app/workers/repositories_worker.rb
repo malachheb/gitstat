@@ -13,11 +13,19 @@ class RepositoriesWorker
         @repo.update_repo(repository)
         #WebsocketRails[:repos].trigger 'update', {name: name, owner: owner}
       end
-    rescue Octokit::Conflict,Octokit::NotFound => e
-      WebsocketRails[:repos].trigger 'error', {name: name, owner: owner, message: e.message }
+    rescue Octokit::Conflict => e
+      send_error_message(owner, name, "Project #{owner}/#{name} is empty")
+    rescue Octokit::NotFound => e
+      send_error_message(owner, name, "Project #{owner}/#{name} is not found")
+    rescue Octokit::ServiceUnavailable => e
+      send_error_message(owner, name, "Service Github API unavailable")
     else
       WebsocketRails[:repos].trigger 'new', {name: name, owner: owner}
     end
   end
+
+  def send_error_message(owner, name, message)
+    WebsocketRails[:repos].trigger 'error', { name: name, owner: owner, message: message }
+  end 
   
 end
