@@ -9,9 +9,10 @@ class RepositoriesWorker
       repository = Github::Repository.get_repository(owner, name)
       if @repo.nil?
         Repository.create_repo(repository)
+        WebsocketRails[:repos].trigger 'new', {name: name, owner: owner}
       elsif @repo.updated_at < repository[:updated_at]
         @repo.update_repo(repository)
-        #WebsocketRails[:repos].trigger 'update', {name: name, owner: owner}
+        WebsocketRails[:repos].trigger 'new', {name: name, owner: owner}
       end
     rescue Octokit::Conflict => e
       send_error_message(owner, name, "Project #{owner}/#{name} is empty")
@@ -19,8 +20,6 @@ class RepositoriesWorker
       send_error_message(owner, name, "Project #{owner}/#{name} is not found")
     rescue Octokit::ServiceUnavailable => e
       send_error_message(owner, name, "Service Github API unavailable")
-    else
-      WebsocketRails[:repos].trigger 'new', {name: name, owner: owner}
     end
   end
 

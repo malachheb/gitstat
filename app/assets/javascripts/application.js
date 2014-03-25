@@ -16,4 +16,5 @@
 //= require websocket_rails/main
 //= require chart
 //= require repo
-
+// require jquery-ui-1.10.4.custom
+// require currency-autocomplete

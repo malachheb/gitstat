@@ -9,6 +9,7 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
+ *= require main
  *= require timeline
  *= require styles
  *= require icon
@@ -22,4 +23,5 @@
  *= require grid
  *= require list
  *= require dimmer
+ *= require jquery-ui-1.10.4.custom.min
  */

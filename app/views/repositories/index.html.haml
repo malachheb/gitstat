@@ -1,6 +1,7 @@
 .page-header
   .ui.fluid.icon.input
     = form_tag search_repositories_path, :method => :get, :remote => true do
-      %input{placeholder: "Search repository..", type: "text", name:"q"}
+      %input{placeholder: "Search repository..", type: "text", name:"q", id: "q" }
     %i.search.icon
-#repos_list
+.repos.top#repos_list
+  .ui.red.inverted.segment.hidden
