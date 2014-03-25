@@ -16,7 +16,7 @@ class Api::V1::ContributorsController < API::ApplicationController
 
   def find_repo
     @repo = Repository.where(:owner => params[:owner], :name => params[:name]).first ||
-      Repository.find(params[:repository_id])
+      Repository.find(params[:repository_id]||'')
   end
 
   def find_contributor

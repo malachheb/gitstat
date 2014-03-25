@@ -69,9 +69,9 @@ class Repository
   end
 
   def committers
-    self.commits.map{|c| c.commiter}.compact.uniq{|u| u.login}
+    commits.map{|c| c.commiter}.compact.uniq{|u| u.login}
   end
-
+  
   def find_or_create_contributors(contributors)
     contributors.each do |contributor|
       self.commiters.find_or_create_by({login: contributor.login, github_id: contributor.id, gravatar_id: contributor.gravatar_id, contributions: contributor.contributions })

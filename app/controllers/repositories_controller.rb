@@ -1,7 +1,7 @@
 class RepositoriesController < ApplicationController
   def index
   end
-
+  
   def show
     @repo = Repository.where(owner: params[:owner], name: params[:name]).first
     RepositoriesWorker.perform_async(params[:owner], params[:name])
@@ -9,7 +9,7 @@ class RepositoriesController < ApplicationController
 
   def search
     @page = (params[:page] || 1).to_i
-    repos = Github::Repository.search_repositories(params[:q],@page,10)
+    repos = Github::Repository.search_repositories(params[:q],@page, PER_PAGE)
     @items = repos.items
     @total = repos.total_count
   end

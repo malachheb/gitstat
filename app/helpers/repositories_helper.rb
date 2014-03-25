@@ -1,6 +1,5 @@
 module RepositoriesHelper
   def chart_data(commits, user)
-    #months_names = (2..12).map{|m| Date::ABBR_MONTHNAMES[m]}
     labels = []
     data = []
     user_data = []
@@ -13,21 +12,21 @@ module RepositoriesHelper
     end
     {labels: labels, data: data, user_data: user_data}
   end
-
+  
   def next_page(page, total)
-    nb_pages = (total/10.0).ceil
+    nb_pages = (total/PER_PAGE.to_f).ceil
     (page+1) > nb_pages ? nb_pages : (page + 1)
   end
-
+  
   def prev_page(page, total)
-    nb_pages = (total/10.0).ceil
+    nb_pages = (total/PER_PAGE.to_f).ceil
     (page-1) <= 0 ? 1 : (page - 1)
   end
-
+  
   def last_page(total)
-    (total/10.0).ceil
+    (total/PER_PAGE.to_f).ceil
   end
-
+  
   def months_names
     months_names = (2..12).map{|m| Date::ABBR_MONTHNAMES[m]}
   end

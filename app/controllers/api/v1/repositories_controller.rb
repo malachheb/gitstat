@@ -12,17 +12,9 @@ class Api::V1::RepositoriesController < API::ApplicationController
     respond_with @repo
   end
 
-  # def contributors
-  #   render :json => @repo.commiters, :status => 200
-  # end
-
-  # def commits
-  #   render :json => @repo.commits, :status => 200
-  # end
-
   def find_repo
     @repo = Repository.where(:owner => params[:owner], :name => params[:name]).first ||
-      Repository.find(params[:id])
+      Repository.find(params[:id]||'')
   end
 
   private
