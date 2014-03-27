@@ -11,7 +11,7 @@ describe Api::V1::CommitsController do
     get :index, {repository_id: @repo.id}
     response.should be_successful
     json = JSON.parse(response.body)
-    json.size.should == 1
+    json.size.should == 2
     json.first['sha'] == '543f1eb6c3247fd625cc4c85b32d75335a5482de'
   end
 

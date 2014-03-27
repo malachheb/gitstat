@@ -42,7 +42,7 @@ class Repository
 
   def update_repo(params)
     since = self.updated_at.iso8601
-    if self..update_attributes(params)
+    if self.update_attributes(params)
       commits =  Github::Repository.get_commits(self.owner, self.name, since)
       self.find_or_create_commits(commits)
       update_commiters(commits)
